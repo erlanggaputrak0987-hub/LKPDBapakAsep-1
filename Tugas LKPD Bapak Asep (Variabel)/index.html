@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LKPD JavaScript – Variable | Erlangga</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Special+Elite&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --maroon:#6d2830;
+  --maroon2:#8a3a42;
+  --deep:#451920;
+  --cream:#efe2c8;
+  --paper:#f6ecd8;
+  --rose:#d8a597;
+  --rose2:#ecc9bb;
+  --mustard:#d6a94f;
+  --ink:#2a1618;
+  --code-bg:#2a1517;
+  --code-fg:#f3e3c3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Space Mono',monospace;
+  font-size:14.5px;line-height:1.65;
+  color:var(--ink);
+  background-color:var(--maroon);
+  background-image:
+    repeating-linear-gradient(135deg,rgba(0,0,0,.07) 0 2px,transparent 2px 9px),
+    radial-gradient(rgba(255,255,255,.035) 1px,transparent 1.5px);
+  background-size:auto,6px 6px;
+}
+
+/* ================= HERO ================= */
+header.hero{
+  position:relative;background:var(--deep);color:var(--cream);
+  background-image:radial-gradient(rgba(239,226,200,.09) 2px,transparent 2.6px);
+  background-size:14px 14px;
+  border-bottom:4px solid var(--ink);
+  margin-bottom:22px;
+}
+header.hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:-26px;height:22px;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='14'><polygon points='0,0 28,0 14,14' fill='%23451920'/></svg>") repeat-x;
+  background-size:28px 14px;
+}
+.hero-in{
+  max-width:1120px;margin:0 auto;padding:54px 22px 64px;
+  display:grid;grid-template-columns:1.6fr .8fr;gap:34px;align-items:end;
+}
+.hero .kicker{
+  display:inline-block;font-family:'Special Elite',monospace;
+  background:var(--mustard);color:var(--ink);
+  padding:3px 12px;transform:rotate(-2deg);
+  letter-spacing:2px;text-transform:uppercase;font-size:13px;margin-bottom:16px;
+}
+.hero h1{
+  font-family:'Anton',sans-serif;font-weight:400;
+  font-size:clamp(64px,13vw,160px);line-height:.88;
+  text-transform:uppercase;letter-spacing:1px;
+  color:var(--cream);text-shadow:6px 6px 0 var(--maroon2);
+}
+.hero h1 span{display:block;color:transparent;-webkit-text-stroke:2px var(--cream);text-shadow:none}
+.hero .sub{margin-top:18px;max-width:520px;border-left:5px solid var(--mustard);padding-left:14px}
+.ticket{
+  background:var(--paper);color:var(--ink);
+  border:3px solid var(--ink);box-shadow:9px 9px 0 rgba(0,0,0,.55);
+  transform:rotate(2.5deg);position:relative;
+}
+.ticket::before{ /* notches */
+  content:"";position:absolute;left:-3px;top:50%;width:14px;height:26px;margin-top:-13px;
+  background:var(--deep);border:3px solid var(--ink);border-left:none;
+}
+.ticket .row{padding:14px 22px 14px 28px}
+.ticket .row+.row{border-top:3px dashed var(--ink)}
+.ticket small{display:block;font-family:'Special Elite',monospace;letter-spacing:3px;text-transform:uppercase;font-size:11px;color:var(--maroon2)}
+.ticket b{font-family:'Anton',sans-serif;font-weight:400;font-size:34px;letter-spacing:1px;text-transform:uppercase;line-height:1.1}
+
+/* ================= MARQUEE ================= */
+.marq{overflow:hidden;background:var(--mustard);color:var(--ink);border-top:3px solid var(--ink);border-bottom:3px solid var(--ink);margin-top:34px}
+.marq div{display:flex;width:max-content;animation:run 28s linear infinite}
+.marq span{font-family:'Anton',sans-serif;font-size:20px;letter-spacing:2px;padding:6px 0;white-space:nowrap;text-transform:uppercase}
+@keyframes run{to{transform:translateX(-50%)}}
+
+/* ================= NAV ================= */
+nav{
+  position:sticky;top:0;z-index:30;
+  background:var(--deep);border-bottom:3px solid var(--mustard);
+  display:flex;flex-wrap:wrap;justify-content:center;gap:4px;padding:8px 10px;
+}
+nav a{
+  font-family:'Special Elite',monospace;text-decoration:none;
+  color:var(--cream);border:1.5px solid var(--maroon2);
+  padding:1px 8px;font-size:13px;
+}
+nav a:hover{background:var(--mustard);color:var(--ink);border-color:var(--mustard)}
+.nav-group{
+  width:100%;display:flex;align-items:center;justify-content:center;
+  flex-wrap:wrap;gap:4px;
+}
+.nav-label{
+  font-family:'Special Elite',monospace;color:var(--mustard);
+  font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-right:4px;
+}
+
+/* ================= LAYOUT ================= */
+main{max-width:1120px;margin:0 auto;padding:10px 18px 70px}
+
+.bab{
+  margin:56px 0 26px;display:flex;align-items:center;gap:16px;
+}
+.bab b{
+  font-family:'Anton',sans-serif;font-weight:400;font-size:clamp(26px,5vw,44px);
+  background:var(--rose);color:var(--deep);padding:2px 22px 2px 16px;letter-spacing:2px;
+  text-transform:uppercase;transform:skew(-8deg);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--deep);
+}
+.bab i{flex:1;height:8px;background:repeating-linear-gradient(135deg,var(--cream) 0 6px,transparent 6px 12px);opacity:.55}
+.bab em{font-family:'Special Elite',monospace;font-style:normal;color:var(--cream);letter-spacing:2px;font-size:13px;text-transform:uppercase}
+
+.sec{
+  position:relative;
+  display:grid;grid-template-columns:150px 1fr;
+  background:var(--paper);border:3px solid var(--ink);
+  box-shadow:10px 10px 0 var(--deep);
+  margin:40px 0;
+}
+.sec.flip{grid-template-columns:1fr 150px}
+.sec.flip .side{order:2;border-right:none;border-left:3px solid var(--ink)}
+.sec.nl{max-width:800px}
+.sec.nr{max-width:800px;margin-left:auto}
+.sec.mid{max-width:960px;margin-left:auto;margin-right:auto}
+.sec::before{ /* tape */
+  content:"";position:absolute;top:-15px;left:176px;width:96px;height:26px;
+  background:rgba(214,169,79,.82);transform:rotate(-4deg);
+  border-left:2px dotted rgba(42,22,24,.35);border-right:2px dotted rgba(42,22,24,.35);z-index:2;
+}
+.sec.flip::before{left:auto;right:176px;transform:rotate(3deg)}
+.side{
+  background:var(--maroon);color:var(--cream);
+  border-right:3px solid var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  padding:16px 8px;gap:6px;
+  background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.14) 0 3px,transparent 3px 10px);
+}
+.side .L{
+  font-family:'Anton',sans-serif;font-size:118px;line-height:.95;
+  color:transparent;-webkit-text-stroke:2.5px var(--cream);
+}
+.side .T{
+  font-family:'Special Elite',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;
+  writing-mode:vertical-rl;transform:rotate(180deg);color:var(--mustard);margin-top:6px;
+}
+.content{padding:22px 26px 26px;min-width:0}
+.content > * + *{margin-top:14px}
+.activity-screenshot{display:block;max-width:100%;height:auto;margin:18px auto 0;border:2px solid var(--ink)}
+.content h2{
+  font-family:'Anton',sans-serif;font-weight:400;font-size:clamp(24px,3.4vw,34px);
+  text-transform:uppercase;letter-spacing:1.5px;line-height:1.05;color:var(--maroon);
+  padding-bottom:8px;border-bottom:4px double var(--ink);
+}
+h3{
+  display:inline-block;font-family:'Special Elite',monospace;font-weight:400;
+  font-size:13px;letter-spacing:1.5px;text-transform:uppercase;
+  background:var(--maroon);color:var(--paper);padding:2px 10px;transform:rotate(-1.5deg);
+  margin-top:6px;
+}
+ul,ol{padding-left:22px}
+li+li{margin-top:4px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.cols.a{grid-template-columns:1.25fr .75fr}
+.cols.b{grid-template-columns:.8fr 1.2fr}
+.cols.c3{grid-template-columns:repeat(3,1fr)}
+.cols > div > * + *{margin-top:12px}
+.two-col-list{column-count:2;column-gap:30px}
+.two-col-list li{break-inside:avoid}
+
+/* ---------- cards: Q&A ---------- */
+.qa{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;align-items:start}
+.qc{border:2px solid var(--ink);background:var(--cream);padding:12px 14px;position:relative}
+.qc:nth-child(even){background:var(--rose2)}
+.qc.full{grid-column:1/-1}
+.qc > * + *{margin-top:8px}
+.q{font-weight:700}
+.ans{
+  background:var(--maroon);color:var(--cream);
+  border-left:7px solid var(--mustard);padding:9px 14px;
+  position:relative;
+}
+.ans::before{
+  content:"JAWAB";display:block;font-family:'Special Elite',monospace;
+  color:var(--mustard);font-size:11px;letter-spacing:3px;margin-bottom:2px;
+}
+.ans code.i{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.25);color:#f6dfae}
+.note{background:var(--cream);border:2px dashed var(--maroon);padding:10px 14px}
+.tip{background:var(--rose2);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--maroon);padding:12px 16px}
+.tip > * + *{margin-top:10px}
+.box{border:2px solid var(--ink);padding:12px 14px;background:var(--cream)}
+.box.r{background:var(--rose2)}
+.box > * + *{margin-top:10px}
+
+/* ---------- code ---------- */
+pre{
+  background:var(--code-bg);color:var(--code-fg);
+  padding:26px 16px 14px;overflow-x:auto;position:relative;
+  border:2px solid var(--ink);box-shadow:5px 5px 0 var(--maroon2);
+  font-size:13px;line-height:1.55;
+}
+pre::before{
+  content:"JS";position:absolute;top:0;left:0;
+  font-family:'Special Elite',monospace;font-size:11px;letter-spacing:2px;
+  background:var(--mustard);color:var(--ink);padding:0 10px;
+}
+code.i{background:#e5d1ab;padding:1px 6px;border:1px solid #c9ad78}
+.k{color:#e3b75f}.s{color:#c4d49a}.n{color:#f2a38c}.c{color:#a38a82;font-style:italic}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:var(--paper)}
+th,td{border:2px solid var(--ink);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--maroon);color:var(--paper);font-family:'Special Elite',monospace;font-weight:400;letter-spacing:1px;text-transform:uppercase;font-size:12.5px}
+td.c,th.c{text-align:center}
+td.fill{background:var(--rose2);font-weight:700;color:var(--deep)}
+td.blank{height:34px}
+tbody tr:nth-child(even) td:not(.fill){background:rgba(216,165,151,.2)}
+
+/* ---------- form ---------- */
+textarea,input[type=text]{
+  width:100%;font-family:inherit;font-size:14px;color:var(--ink);
+  background:#fffaf0;border:2px solid var(--ink);padding:8px 10px;border-radius:0;
+}
+textarea{min-height:90px;resize:vertical}
+.static-answer{
+  width:100%;min-height:90px;font-family:inherit;font-size:14px;line-height:1.65;
+  color:var(--ink);background:#fffaf0;border:2px solid var(--ink);padding:8px 10px;
+}
+input[type=checkbox],input[type=radio]{width:18px;height:18px;accent-color:var(--maroon);cursor:pointer;border-radius:0}
+label{cursor:pointer}
+.chk{display:flex;gap:20px;flex-wrap:wrap}
+
+/* ---------- special ---------- */
+.stamp{
+  display:inline-block;font-family:'Anton',sans-serif;font-size:clamp(28px,6vw,58px);
+  text-transform:uppercase;letter-spacing:3px;line-height:1.05;
+  color:var(--maroon);border:5px double var(--maroon);padding:8px 22px;
+  transform:rotate(-4deg);opacity:.9;
+}
+.big-msg{font-family:'Anton',sans-serif;font-size:clamp(22px,4vw,34px);text-transform:uppercase;letter-spacing:1px;line-height:1.15;color:var(--deep)}
+.center{text-align:center}
+
+footer{
+  background:var(--deep);color:var(--cream);text-align:center;
+  padding:26px 16px;border-top:4px solid var(--mustard);
+  font-family:'Special Elite',monospace;letter-spacing:2px;text-transform:uppercase;font-size:13px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width:860px){
+  .hero-in{grid-template-columns:1fr}
+  .ticket{max-width:340px}
+  .cols,.cols.a,.cols.b,.cols.c3,.qa{grid-template-columns:1fr}
+  .two-col-list{column-count:1}
+}
+@media (max-width:640px){
+  .sec,.sec.flip{grid-template-columns:1fr}
+  .sec.flip .side{order:0;border-left:none}
+  .side{flex-direction:row;border-right:none;border-bottom:3px solid var(--ink);padding:6px 14px;align-items:center;gap:14px}
+  .side .L{font-size:56px}
+  .side .T{writing-mode:horizontal-tb;transform:none}
+  .sec::before,.sec.flip::before{left:20px;right:auto}
+  .content{padding:18px 16px 22px}
+  .sec.nl,.sec.nr,.sec.mid{max-width:none}
+}
+@media print{nav,.marq{display:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <div>
+      <span class="kicker">LKPD · Dasar-Dasar Pengembangan Perangkat Lunak &amp; Gim</span>
+      <h1>Variable<span>JavaScript</span></h1>
+      <p class="sub">Lembar Kerja Peserta Didik &mdash; Materi: <b>JavaScript – Variable</b></p>
+    </div>
+    <div class="ticket">
+      <div class="row"><small>Nama</small><b>Erlangga P.K.</b></div>
+      <div class="row"><small>Kelas</small><b>X PPLG 2</b></div>
+    </div>
+  </div>
+</header>
+
+<div class="marq"><div>
+  <span>&nbsp;Variable ✦ let ✦ const ✦ console.log() ✦ String ✦ Number ✦ Boolean ✦ Variable ✦ let ✦ const ✦ console.log() ✦ String ✦ Number ✦ Boolean ✦ Error bukan gagal ✦&nbsp;</span>
+  <span>&nbsp;Variable ✦ let ✦ const ✦ console.log() ✦ String ✦ Number ✦ Boolean ✦ Variable ✦ let ✦ const ✦ console.log() ✦ String ✦ Number ✦ Boolean ✦ Error bukan gagal ✦&nbsp;</span>
+</div></div>
+
+<nav>
+  <div class="nav-group" aria-label="Navigasi A sampai Z">
+  <span class="nav-label"><h3>A–Z</h3></span>
+  <a href="#a">A</a><a href="#b">B</a><a href="#c">C</a><a href="#d">D</a><a href="#e">E</a>
+  <a href="#f">F</a><a href="#g">G</a><a href="#h">H</a><a href="#i">I</a><a href="#j">J</a>
+  <a href="#k">K</a><a href="#l">L</a><a href="#m">M</a><a href="#n">N</a><a href="#o">O</a>
+  <a href="#p">P</a><a href="#q">Q</a><a href="#r">R</a><a href="#s">S</a><a href="#t">T</a>
+  <a href="#u">U</a><a href="#v">V</a><a href="#w">W</a><a href="#x">X</a><a href="#y">Y</a><a href="#z">Z</a>
+  </div>
+  <div class="nav-group" aria-label="Navigasi aktivitas">
+    <span class="nav-label">Aktivitas</span>
+    <a href="#e">1</a><a href="#f">2</a><a href="#g">3</a><a href="#h">4</a><a href="#i">5</a>
+    <a href="#j">6</a><a href="#k">7</a><a href="#l">8</a><a href="#m">9</a><a href="#n">10</a>
+    <a href="#o">11</a><a href="#p">12</a><a href="#q">13</a>
+  </div>
+  <div class="nav-group" aria-label="Navigasi bab">
+    <span class="nav-label">Bab</span>
+    <a href="#bab1">1</a><a href="#bab2">2</a><a href="#bab3">3</a>
+    <a href="#bab4">4</a><a href="#bab5">5</a><a href="#bab6">6</a>
+  </div>
+</nav>
+
+<main>
+
+<div class="bab" id="bab1"><b>Bab 1</b><em>Pemanasan · A–D</em><i></i></div>
+
+<!-- ===================== A ===================== -->
+<section class="sec nl" id="a">
+  <div class="side"><div class="L">A</div><div class="T">Identitas</div></div>
+  <div class="content">
+    <h2>Identitas Pembelajaran</h2>
+    <div class="tw"><table>
+      <tr><th>Mata Pelajaran</th><td>Dasar-Dasar Pengembangan Perangkat Lunak dan Gim</td></tr>
+      <tr><th>Materi</th><td>Variable pada JavaScript</td></tr>
+      <tr><th>Alokasi Waktu</th><td>2 × 45 menit</td></tr>
+      <tr><th>Model Pembelajaran</th><td>Problem Based Learning / Discovery Learning</td></tr>
+      <tr><th>Metode</th><td>Eksplorasi, praktik, diskusi, tanya jawab, refleksi</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ===================== B ===================== -->
+<section class="sec flip" id="b">
+  <div class="side"><div class="L">B</div><div class="T">Tujuan</div></div>
+  <div class="content">
+    <h2>Tujuan Pembelajaran</h2>
+    <p>Setelah menyelesaikan kegiatan pembelajaran ini, peserta didik diharapkan mampu:</p>
+    <ol class="two-col-list">
+      <li>Menjelaskan pengertian variable dengan bahasa sendiri.</li>
+      <li>Menjelaskan fungsi variable dalam program.</li>
+      <li>Membedakan <code class="i">let</code> dan <code class="i">const</code> secara sederhana.</li>
+      <li>Membuat variable menggunakan JavaScript.</li>
+      <li>Memberikan nama variable sesuai aturan penamaan.</li>
+      <li>Menyimpan data berupa teks dan angka ke dalam variable.</li>
+      <li>Menampilkan nilai variable menggunakan <code class="i">console.log()</code>.</li>
+      <li>Membuat program JavaScript sederhana yang menggunakan beberapa variable.</li>
+      <li>Menemukan dan memperbaiki kesalahan sederhana pada penggunaan variable.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===================== C ===================== -->
+<section class="sec nr" id="c">
+  <div class="side"><div class="L">C</div><div class="T">Keselamatan</div></div>
+  <div class="content">
+    <h2>Petunjuk Keselamatan dan Kerja</h2>
+    <p>Dalam kegiatan praktik:</p>
+    <ul>
+      <li>Gunakan komputer/laptop dengan hati-hati.</li>
+      <li>Jangan menghapus file milik teman.</li>
+      <li>Simpan pekerjaan secara berkala.</li>
+      <li>Jangan menyalin kode teman tanpa memahami fungsinya.</li>
+      <li>Jika menemukan error, jangan panik.
+        <ul><li>Baca pesan error dan diskusikan penyebabnya.</li></ul>
+      </li>
+      <li>Setiap anggota kelompok harus memahami hasil pekerjaan kelompok.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== D ===================== -->
+<section class="sec" id="d">
+  <div class="side"><div class="L">D</div><div class="T">Apersepsi</div></div>
+  <div class="content">
+    <h2>Apersepsi</h2>
+    <div class="cols a">
+      <div>
+        <p>Bayangkan kamu sedang membuat aplikasi data siswa. Program perlu mengetahui:</p>
+        <ul class="two-col-list"><li>Nama siswa</li><li>Kelas</li><li>Umur</li><li>Nilai</li><li>Jurusan</li></ul>
+        <div class="box">
+          <p>Contohnya:</p>
+          <ul>
+            <li>Nama siswa = "Budi"</li>
+            <li>Kelas = "XI RPL 1"</li>
+            <li>Umur = 16</li>
+            <li>Nilai = 85</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <p class="q">Menurutmu, bagaimana cara menyimpan informasi tersebut di dalam program? Tuliskan dugaanmu:</p>
+        <div class="ans">Informasi tersebut disimpan di dalam sebuah "wadah" atau tempat penyimpanan data yang diberi nama, sehingga program bisa memanggil dan memakainya kembali kapan saja. Wadah ini disebut variable, misalnya <code class="i">let nama = "Budi";</code></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="bab" id="bab2"><b>Bab 2</b><em>Bongkar Variable · E–I</em><i></i></div>
+
+<!-- ===================== E ===================== -->
+<section class="sec flip" id="e">
+  <div class="side"><div class="L">E</div><div class="T">Aktivitas 1 · Mengamati</div></div>
+  <div class="content">
+    <h2>Aktivitas 1 – Mengamati</h2>
+    <div class="cols b">
+      <div>
+        <p>Perhatikan kode berikut:</p>
+<pre><span class="k">let</span> nama = <span class="s">"Budi"</span>;
+<span class="k">let</span> umur = <span class="n">16</span>;
+<span class="k">let</span> nilai = <span class="n">85</span>;
+
+console.log(nama);
+console.log(umur);
+console.log(nilai);</pre>
+        <p>Jalankan kode tersebut menggunakan browser.</p>
+        <img class="activity-screenshot" src="skrinsut/kode1.png" alt="Hasil pengamatan pada Console">
+        <img class="activity-screenshot" src="skrinsut/konsol1.png" alt="Hasil pengamatan pada Console">
+      </div>
+      <div>
+        <h3>Pertanyaan</h3>
+        <div class="qa">
+          <div class="qc">
+            <p class="q">1. Apa yang ditampilkan pada Console?</p>
+            <div class="ans">Console menampilkan tiga baris: <b>Budi</b>, <b>16</b>, dan <b>85</b>.</div>
+          </div>
+          <div class="qc">
+            <p class="q">2. Menurutmu, apa fungsi <code class="i">nama</code>, <code class="i">umur</code>, dan <code class="i">nilai</code>?</p>
+            <div class="ans">Ketiganya adalah nama variable, yaitu tempat menyimpan data ("Budi", 16, dan 85) sehingga datanya bisa dipanggil lagi dengan menyebut namanya.</div>
+          </div>
+          <div class="qc full">
+            <p class="q">3. Apa yang terjadi jika kode berikut dijalankan?</p>
+<pre>console.log(nama);</pre>
+            <div class="ans">Jika variable <code class="i">nama</code> sudah dibuat sebelumnya (seperti pada kode di atas), Console menampilkan <b>Budi</b>. Jika belum pernah dibuat, akan muncul error <b>ReferenceError: nama is not defined</b> karena JavaScript tidak mengenal nama tersebut.</div>
+          </div>
+          <div class="qc full">
+            <p class="q">4. Menurut dugaanmu, apa yang dimaksud dengan variable?</p>
+            <div class="ans">Variable adalah tempat untuk menyimpan data yang diberi nama, agar data tersebut dapat digunakan kembali oleh program.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== F ===================== -->
+<section class="sec mid" id="f">
+  <div class="side"><div class="L">F</div><div class="T">Aktivitas 2 · Mengenal</div></div>
+  <div class="content">
+    <h2>Aktivitas 2 – Mengenal Variable</h2>
+    <h3>1. Apa itu Variable?</h3>
+    <p>Variable dapat dianggap sebagai tempat untuk menyimpan sebuah data agar data tersebut dapat digunakan kembali oleh program.</p>
+    <div class="cols">
+      <div>
+        <p>Contoh:</p>
+<pre><span class="k">let</span> nama = <span class="s">"Andi"</span>;</pre>
+        <p>Dapat dibayangkan seperti:</p>
+<pre>      nama
+┌──────────────┐
+│    "Andi"    │
+└──────────────┘</pre>
+      </div>
+      <div>
+        <p>Pada kode <code class="i">let nama = "Andi";</code> terdapat:</p>
+        <div class="tw"><table>
+          <tr><th>Bagian</th><th>Fungsi</th></tr>
+          <tr><td><code class="i">let</code></td><td>Membuat variable</td></tr>
+          <tr><td><code class="i">nama</code></td><td>Nama variable</td></tr>
+          <tr><td><code class="i">=</code></td><td>Memberikan nilai</td></tr>
+          <tr><td><code class="i">"Andi"</code></td><td>Nilai yang disimpan</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== G ===================== -->
+<section class="sec flip" id="g">
+  <div class="side"><div class="L">G</div><div class="T">Aktivitas 3 · Praktik</div></div>
+  <div class="content">
+    <h2>Aktivitas 3 – Praktik Membuat Variable</h2>
+    <div class="cols a">
+      <div>
+        <p>Buat file: <code class="i">variable.html</code> kemudian masukkan kode berikut:</p>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Belajar Variable&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script&gt;
+    let nama = "Budi";
+    let kelas = "XI RPL 1";
+    let umur = 16;
+
+    console.log(nama);
+    console.log(kelas);
+    console.log(umur);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+      <div>
+        <div style="margin-top: 42px;" class="note">Buka file tersebut menggunakan browser. Kemudian buka:<br><b>Klik kanan → Inspect → Console</b></div>
+        <h3 style="margin-top: 30px;">Hasil Pengamatan</h3>
+        <p>Tuliskan hasil yang muncul pada Console.</p>
+        <div class="tw"><table>
+          <tr><th>Nama</th><td class="fill">Budi</td></tr>
+          <tr><th>Kelas</th><td class="fill">XI RPL 1</td></tr>
+          <tr><th>Umur</th><td class="fill">16</td></tr>
+        </table></div>
+      </div>
+    </div>
+    <img class="activity-screenshot" src="skrinsut/Console%20(aktivitas%203).png" alt="Hasil Pengamatan Console">
+  </div>
+</section>
+
+<!-- ===================== H ===================== -->
+<section class="sec" id="h">
+  <div class="side"><div class="L">H</div><div class="T">Aktivitas 4 · Eksperimen</div></div>
+  <div class="content">
+    <h2>Aktivitas 4 – Eksperimen</h2>
+    <p>Sekarang ubahlah program sebelumnya. Ubah <code class="i">let nama = "Budi";</code> menjadi nama kamu sendiri. Contoh: <code class="i">let nama = "Asep";</code> Kemudian ubah juga <code class="i">let kelas = "XI RPL 1";</code> dan <code class="i">let umur = 16;</code> sesuai data kamu.</p>
+    <div class="cols b">
+      <div>
+        <h3>Hasil perubahan kodenya:</h3>
+
+        <img style = "margin-top: 30px;" class="activity-screenshot" src="skrinsut/Aktivitas4.png" alt="Hasil perubahan kode Aktivitas 4">
+        
+      </div>
+      <div>
+        <h3>Pertanyaan</h3>
+        <div class="qa" style="grid-template-columns:1fr">
+          <div class="qc">
+            <p class="q">1. Apakah hasil pada Console berubah?</p>
+            <div class="ans">Ya, hasilnya berubah menjadi data baru: Erlangga Cobain Noveselic, X PPLG 2, dan umur yang telah saya isi.</div>
+          </div>
+          <div class="qc">
+            <p class="q">2. Bagian kode mana yang kamu ubah?</p>
+            <div class="ans">Saya mengubah nilai pada bagian kanan setelah sama dengan (<code class="i">=</code>), yaitu "Budi" menjadi "Erlangga Cobain Noveselic", "XI RPL 1" menjadi "X PPLG 2", dan angka umurnya.</div>
+          </div>
+          <div class="qc">
+            <p class="q">3. Mengapa program dapat menampilkan data yang baru?</p>
+            <div class="ans">Karena <code class="i">console.log()</code> menampilkan isi variable. Saat nilai di dalam variable diganti, isi yang tersimpan ikut berubah, sehingga yang ditampilkan juga data yang baru.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3>Hasil Konsol Aktivitas 4</h3>
+    <img class="activity-screenshot" src="skrinsut/konsol4.png" alt="Bukti screenshot Aktivitas 4">
+  </div>
+</section>
+
+<!-- ===================== I ===================== -->
+<section class="sec flip nl" id="i">
+  <div class="side"><div class="L">I</div><div class="T">Aktivitas 5 · Jenis Data</div></div>
+  <div class="content">
+    <h2>Aktivitas 5 – Variable untuk Menyimpan Berbagai Data</h2>
+    <p>JavaScript dapat menyimpan berbagai jenis data. Perhatikan:</p>
+<pre><span class="k">let</span> nama = <span class="s">"Andi"</span>;
+<span class="k">let</span> umur = <span class="n">17</span>;
+<span class="k">let</span> tinggi = <span class="n">170</span>;
+<span class="k">let</span> aktif = <span class="n">true</span>;</pre>
+    <p>Identifikasi data tersebut.</p>
+    <div class="tw"><table>
+      <tr><th>Variable</th><th>Nilai</th><th>Jenis Data</th></tr>
+      <tr><td>nama</td><td>"Andi"</td><td class="fill">String (teks)</td></tr>
+      <tr><td>umur</td><td>17</td><td class="fill">Number (angka)</td></tr>
+      <tr><td>tinggi</td><td>170</td><td class="fill">Number (angka)</td></tr>
+      <tr><td>aktif</td><td>true</td><td class="fill">Boolean (benar/salah)</td></tr>
+    </table></div>
+    <h3>Kesimpulan</h3>
+    <p>Data yang ditulis menggunakan tanda kutip seperti <code class="i">"Andi"</code> merupakan data:</p>
+    <div class="ans">String (teks)</div>
+    <p>Sedangkan <code class="i">17</code> merupakan data:</p>
+    <div class="ans">Number (angka)</div>
+  </div>
+</section>
+
+<div class="bab" id="bab3"><b>Bab 3</b><em>let vs const · J–L</em><i></i></div>
+
+<!-- ===================== J ===================== -->
+<section class="sec" id="j">
+  <div class="side"><div class="L">J</div><div class="T">Aktivitas 6 · let &amp; const</div></div>
+  <div class="content">
+    <h2>Aktivitas 6 – Mengenal let dan const</h2>
+    <div class="cols">
+      <div class="box">
+        <h3 style = "margin-left: 118px";><b>Penggunaan let</b></h3>
+        <p style = "margin-top: 35px; margin-bottom: 5px";><b>Perhatikan kode berikut:</b></p>
+<pre><span class="k">let</span> umur = <span class="n">16</span>;
+umur = <span class="n">17</span>;
+console.log(umur);</pre>
+        <img class="activity-screenshot" src="skrinsut/kodelet6.png" alt="Hasil Aktivitas 6">
+        <p style = "margin-top: 35px; margin-bottom: 5px";><b>Hasilnya</b></p>
+        <img class="activity-screenshot" src="skrinsut/konsollet6.png" alt="Hasil Aktivitas 6">
+        <div style="margin-top: 40px;"class="ans">Nilai didalam variabel bernama "usia" dideklarasikan 2 kali, pertama berisi 26, kedua berisi 27. Lalu ketika dijalankan tidak terjadi eror, isi dari variabelnya menjadi data yang dideklarasikan paling terbaru (terakhir)</div>
+      </div>
+      <div class="box r">
+        <h3 style = "margin-left: 114px";><b>Penggunaan const</b></h3>
+        <p style = "margin-top: 35px; margin-bottom: 5px";><b>Sekarang coba:</b></p>
+<pre><span class="k">const</span> nama = <span class="s">"Budi"</span>;
+nama = <span class="s">"Andi"</span>;
+console.log(nama);</pre>
+        <img class="activity-screenshot" src="skrinsut/kodeconst6.png" alt="Hasil Aktivitas 6">
+        <p  style = "margin-top: 35px; margin-bottom: 5px"; class="q">Apa yang terjadi?</p>
+        <img class="activity-screenshot" src="skrinsut/konsolconst6.png" alt="Hasil Aktivitas 6">
+        <div style="margin-top: 40px;" class="ans">Muncul error <b>TypeError: Assign ment to constant variable.</b> Nilai variable yang dibuat dengan <code class="i">const</code> tidak bisa dideklarasikan 2 kali atau lebih dengan isi data yang berbeda, sehingga <code class="i">console.log(nama)</code> tidak dijalankan.</div>
+      </div>
+    </div>
+    <h3 style = "margin-top: 45px";>Kesimpulan Sementara</h3>
+    <p>Lengkapi tabel berikut.</p>
+    <div class="tw"><table>
+      <tr><th>Keyword</th><th>Nilai dapat diubah?</th><th>Kegunaan sederhana</th></tr>
+      <tr><td><code class="i">let</code></td><td class="fill">Ya, dapat diubah</td><td class="fill">Menyimpan data yang masih mungkin berubah</td></tr>
+      <tr><td><code class="i">const</code></td><td class="fill">Tidak, tidak dapat diubah</td><td class="fill">Menyimpan data yang tetap / tidak perlu diubah</td></tr>
+    </table></div>
+    <div class="tip">
+      <b>INGAT!</b>
+      <div class="cols">
+        <div>
+          <p>Gunakan <code class="i">let</code> untuk data yang masih mungkin berubah. Contoh:</p>
+<pre>let nilai = 80;
+nilai = 90;</pre>
+        </div>
+        <div>
+          <p>Gunakan <code class="i">const</code> untuk data yang tidak perlu diubah. Contoh:</p>
+<pre>const namaSekolah = "SMKN 1 Garut";</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== K ===================== -->
+<section class="sec flip mid" id="k">
+  <div class="side"><div class="L">K</div><div class="T">Aktivitas 7 · Penamaan</div></div>
+  <div class="content">
+    <h2>Aktivitas 7 – Aturan Penamaan Variable</h2>
+    <p>Perhatikan nama variable berikut:</p>
+<pre>let nama;
+let namaSiswa;
+let nama_siswa;
+let umur2;</pre>
+    <p>Beberapa aturan dasar:</p>
+    <div class="cols c3">
+      <div class="box">
+        <h3>✓ Diperbolehkan</h3>
+<pre>let nama;
+let namaSiswa;
+let nama_siswa;
+let nilai1;</pre>
+      </div>
+      <div class="box r">
+        <h3>✗ Tidak diperbolehkan</h3>
+<pre>let 1nama;
+let nama siswa;
+let nama-siswa;</pre>
+      </div>
+      <div class="box">
+        <h3>Perhatikan juga</h3>
+        <p><b>JavaScript membedakan huruf besar dan kecil.</b></p>
+<pre>let nama = "Andi";
+console.log(nama);</pre>
+        <p>berbeda dengan:</p>
+<pre>console.log(Nama);</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== L ===================== -->
+<section class="sec" id="l">
+  <div class="side"><div class="L">L</div><div class="T">Aktivitas 8 · Mana yang benar?</div></div>
+  <div class="content">
+    <h2>Aktivitas 8 – Mana yang Benar?</h2>
+    <p>Berikan tanda ✓ pada nama variable yang benar dan tanda ✗ pada nama variable yang salah.</p>
+    <div class="cols b">
+      <div class="tw"><table>
+        <tr><th class="c">No.</th><th>Nama Variable</th><th class="c">✓ / ✗</th></tr>
+        <tr><td class="c">1</td><td>nama</td><td class="c fill">✓</td></tr>
+        <tr><td class="c">2</td><td>namaSiswa</td><td class="c fill">✓</td></tr>
+        <tr><td class="c">3</td><td>nama_siswa</td><td class="c fill">✓</td></tr>
+        <tr><td class="c">4</td><td>2nama</td><td class="c fill">✗</td></tr>
+        <tr><td class="c">5</td><td>nama siswa</td><td class="c fill">✗</td></tr>
+        <tr><td class="c">6</td><td>nilaiAkhir</td><td class="c fill">✓</td></tr>
+        <tr><td class="c">7</td><td>nilai1</td><td class="c fill">✓</td></tr>
+        <tr><td class="c">8</td><td>nilai-akhir</td><td class="c fill">✗</td></tr>
+        <tr><td class="c">9</td><td>Alamat</td><td class="c fill">✓</td></tr>
+        <tr><td class="c">10</td><td>alamatSiswa</td><td class="c fill">✓</td></tr>
+      </table></div>
+      <div>
+        <h3>Perbaiki nama variable yang salah</h3>
+        <div class="tw"><table>
+          <tr><th>Yang salah</th><th>Menjadi</th></tr>
+          <tr><td><code class="i">2nama</code></td><td class="fill">nama2</td></tr>
+          <tr><td><code class="i">nama siswa</code></td><td class="fill">namaSiswa</td></tr>
+          <tr><td><code class="i">nilai-akhir</code></td><td class="fill">nilaiAkhir</td></tr>
+        </table></div>
+        <div class="note">
+          <b>Alasan:</b><br>
+          • <code class="i">2nama</code> &rarr; tidak boleh karena berawalan angka<br>
+          • <code class="i">nama siswa</code> &rarr; tidak boleh dada spasi<br>
+          • <code class="i">nilai-akhir</code> &rarr; tidak boleh memakai tanda hubungㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ(strip/-).
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="bab" id="bab4"><b>Bab 4</b><em>Hajar Kodenya · M–P</em><i></i></div>
+
+<!-- ===================== M ===================== -->
+<section class="sec flip" id="m">
+  <div class="side"><div class="L">M</div><div class="T">Aktivitas 9 · Data diri</div></div>
+  <div class="content">
+    <h2>Aktivitas 9 – Tantangan Data Diri</h2>
+    <div class="cols b">
+      <div>
+        <p>Buat program JavaScript yang menyimpan data diri menggunakan variable.</p>
+        <p>Data yang harus disimpan:</p>
+        <ol class="two-col-list"><li>Nama</li><li>Kelas</li><li>Jurusan</li><li>Umur</li><li>Hobi</li></ol>
+        <p>Gunakan minimal 5 variable.</p>
+      </div>
+      <div>
+        <p>Contoh:</p>
+<pre>let nama = "Budi";
+let kelas = "XI RPL 1";
+let jurusan = "Rekayasa Perangkat Lunak";
+let umur = 17;
+let hobi = "Bermain game";
+
+console.log(nama);
+console.log(kelas);
+console.log(jurusan);
+console.log(umur);
+console.log(hobi);</pre>
+      </div>
+    </div>
+    <h3 style="margin-top: 60px;">Versi saya :</h3>
+
+    <img class="activity-screenshot" src="skrinsut/kodeaktivitas9.png" alt="Kode Aktivitas 9">
+    <img class="activity-screenshot" src="skrinsut/consoleaktivitas9.png" alt="Hasil Console Aktivitas 9">
+  </div>
+</section>
+
+<!-- ===================== N ===================== -->
+<section class="sec" id="n">
+  <div class="side"><div class="L">N</div><div class="T">Aktivitas 10 · Level 2</div></div>
+  <div class="content">
+    <h2>Aktivitas 10 – Tantangan Level 2</h2>
+    <div class="cols">
+      <div>
+        <p>Sekarang buat program untuk menyimpan data seorang siswa.</p>
+        <p>Data:</p>
+        <ul><li>Nama siswa</li><li>Nilai Bahasa Indonesia</li><li>Nilai Matematika</li><li>Nilai Produktif</li></ul>
+        <p>Kemudian tampilkan semua data menggunakan <code class="i">console.log();</code></p>
+      </div>
+      <div>
+        <p>Contoh:</p>
+<pre>let nama = "Andi";
+let bahasaIndonesia = 80;
+let matematika = 85;
+let produktif = 90;</pre>
+      </div>
+    </div>
+   
+    <div class="cols a">
+
+    <div>
+
+    <h3 style="margin-bottom: 20px; margin-top: 60px;">Versi kode saya :</h3>
+
+      <img class="activity-screenshot" src="skrinsut/kode10.png" alt="Kode Aktivitas 10">
+      <img class="activity-screenshot" src="skrinsut/konsol10.png" alt="Hasil Console Aktivitas 10">
+
+    </div>
+
+      
+      <div>
+        <h3 style="margin-bottom: 20px; margin-top: 60px;">Pertanyaan</h3>
+        <div class="qc"><p class="q">1. Berapa variable yang kamu buat?                                                                   </p><div class="ans">4 variable.</div></div>
+        <div class="qc"><p class="q">2. Mana variable yang menyimpan teks?</p><div class="ans"><code class="i">nama</code></div></div>
+        <div class="qc"><p class="q">3. Mana variable yang menyimpan angka?</p><div class="ans"><code class="i">bahasaIndonesia</code>, <code class="i">matematika</code>, dan <code class="i">produktif</code></div></div>
+
+    
+            <div style="margin-top: 27px;" class="qc"><p class="q">- - - - - - - - - - - - - - - - </p></div>
+            <div class="qc"><p class="q">- - - - - - - - - - - - - - - - </p></div>
+            <div class="qc"><p class="q">- - - - - - - - - - - - - - - - </p></div>
+            <div class="qc"><p class="q">- - - - - - - - - - - - - - - - </p></div>
+            <div class="qc"><p class="q">- - - - - - - - - - - - - - - - </p></div>
+
+    
+
+    </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===================== O ===================== -->
+<section class="sec flip mid" id="o">
+  <div class="side"><div class="L">O</div><div class="T">Aktivitas 11 · Debugging</div></div>
+  <div class="content">
+    <h2>Aktivitas 11 – Debugging</h2>
+    <p>Program berikut memiliki beberapa kesalahan.</p>
+    <p><b>Tugas:</b> Temukan kesalahan tersebut dan perbaiki programnya.</p>
+    <div class="cols">
+    
+      <div class="box r">
+        <h3>Kode yang error</h3>
+<pre>let nama siswa = "Budi";
+let umur = 16;
+let 2kelas = "XI RPL";
+
+console.log(nama siswa);
+console.log(umur);
+console.log(2kelas);</pre>
+
+<img class="activity-screenshot" src="skrinsut/11eror.png" alt="Kode Aktivitas 11">
+       
+      </div>
+      <div class="box">
+        <h3>Program yang sudah diperbaiki</h3>
+        <img class="activity-screenshot" src="skrinsut/kode11.png" alt="Kode Aktivitas 11">
+        <img class="activity-screenshot" src="skrinsut/konsol11.png" alt="Hasil Console Aktivitas 11">
+      </div>
+    </div>
+    
+    <p class="q">Apa saja kesalahan yang kamu temukan?</p>
+    <div class="ans">
+      1. <code class="i">nama siswa</code> memakai spasi, seharusnya digabung menjadi <code class="i">namaSiswa</code> (di <code class="i">let</code> dan di <code class="i">console.log</code>).<br>
+      2. <code class="i">2kelas</code> diawali angka, seharusnya diubah menjadi <code class="i">kelas2</code> (di <code class="i">let</code> dan di <code class="i">console.log</code>).<br>
+      3. Nama variable pada <code class="i">console.log</code> harus sama persis dengan nama saat variable dibuat (huruf besar-kecil juga berpengaruh).
+    </div>
+  </div>
+</section>
+
+<!-- ===================== P ===================== -->
+<section class="sec" id="p">
+  <div class="side"><div class="L">P</div><div class="T">Aktivitas 12 · Challenge</div></div>
+    <div class="content">
+     <h2>Aktivitas 12 – Challenge</h2>
+        <div class="cols b">
+            <div>
+                <p>Program <b>"Profil Siswa"</b></p>
+                <p>Buat sebuah program JavaScript sederhana yang menyimpan:</p>
+                <ul class="two-col-list"><li>Nama</li><li>Kelas</li><li>Jurusan</li><li>Umur</li><li>Kota</li><li>Hobi</li><li>Cita-cita</li></ul>
+                <p>Kemudian tampilkan seluruh data tersebut menggunakan <code class="i">console.log()</code>.</p>
+            </div>
+            <div>
+                <p>Contoh:</p>
+                    <pre>const nama = "Andi";
+                    const kelas = "XI RPL 1";
+                    const jurusan = "Rekayasa Perangkat Lunak";
+                    const umur = 17;
+                    const kota = "Garut";
+                    const hobi = "Coding";
+                    const citaCita = "Programmer";
+
+                    console.log(nama);
+                    console.log(kelas);
+                    console.log(jurusan);
+                    console.log(umur);
+                    console.log(kota);
+                    console.log(hobi);
+                    console.log(citaCita);</pre>
+            </div>
+        </div>
+        <h3 style = "margin-top: 30px;">Kembangkan program tersebut!</h3>
+        <p>Tambahkan minimal 2 variable baru.</p>
+
+        <img class="activity-screenshot" src="skrinsut/kode12.png" alt="Kode Aktivitas 12">
+        <img class="activity-screenshot" src="skrinsut/konsol12.png" alt="Hasil Console Aktivitas 12">
+
+        <p><b>Variable tambahan:</b></p>
+        <div class="ans"><code class="i">sekolah</code> (berisi teks "SMKN 1 Garut")</div>
+        <div class="ans"><code class="i">beratbadan</code> (berisi nilai 49)</div>
+        <div class="ans"><code class="i">tinggibadan</code> (berisi nilai 163)</div>
+        <div class="ans"><code class="i">penyakit</code> (berisi nilai boolean <code class="i">false</code>).</div>
+
+    </div>
+</section>
+
+<div class="bab" id="bab5"><b>Bab 5</b><em>Refleksi · Q–T</em><i></i></div>
+
+<!-- ===================== Q ===================== -->
+<section class="sec flip" id="q">
+  <div class="side"><div class="L">Q</div><div class="T">Aktivitas 13 · Think Pair Share</div></div>
+  <div class="content">
+    <h2>Aktivitas 13 – Think Pair Share</h2>
+    <div class="cols c3">
+      <div class="box">
+        <h3>Think</h3>
+        <p>Jawab sendiri terlebih dahulu.</p>
+        <p class="q">Menurutmu, mengapa programmer membutuhkan variable?</p>
+        <div class="ans">Karena program selalu bekerja dengan data untuk nilai, nama dsb. Dengan variable, datanya tersimpan dengan nama variable, sehingga bisa disimpan dan digunakan kembali tanpa harus menulis ulang. Dengan variable juga, penulisan lebih rapih sehingga lebih mudah dipelihara</div>
+      </div>
+      <div class="box r">
+        <h3>Pair</h3>
+        <p>Bandingkan jawabanmu dengan teman.</p>
+        <p class="q">Apakah jawaban kalian sama?</p>
+        <div class="ans">---------</div>
+        <p class="q">Jika berbeda, apa perbedaannya?</p>
+        <div class="ans">---------</div>
+      </div>
+      <div class="box">
+        <h3>Share</h3>
+        <p>Diskusikan hasilnya bersama kelompok.</p>
+        <p class="q">Tuliskan kesimpulan kelompok:</p>
+        <div class="ans">---------</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== R ===================== -->
+<!-- //refleksi -->
+<section class="sec" id="r">
+  <div class="side"><div class="L">R</div><div class="T">Refleksi</div></div>
+  <div class="content">
+    <h2>Refleksi</h2>
+    <p>Berikan tanda ✓ sesuai dengan pemahamanmu.</p>
+    <div class="tw"><table>
+      <tr><th>Pernyataan</th><th class="c">Belum Paham</th><th class="c">Mulai Paham</th><th class="c">Paham</th></tr>
+      <tr><td>Saya memahami pengertian variable</td>
+        <td class="c"></td><td class="c"></td><td class="c fill">✓</td></tr>
+      <tr><td>Saya dapat membuat variable dengan <code class="i">let</code></td>
+        <td class="c"></td><td class="c fill">✓</td><td class="c"></td></tr>
+      <tr><td>Saya memahami penggunaan <code class="i">const</code></td>
+        <td class="c"></td><td class="c fill">✓</td><td class="c"></td></tr>
+      <tr><td>Saya dapat menyimpan data ke dalam variable</td>
+        <td class="c"></td><td class="c"></td><td class="c fill">✓</td></tr>
+      <tr><td>Saya dapat menampilkan variable dengan <code class="i">console.log()</code></td>
+        <td class="c"></td><td class="c fill">✓</td><td class="c"></td></tr>
+      <tr><td>Saya dapat memberikan nama variable dengan benar</td>
+        <td class="c"></td><td class="c"></td><td class="c fill">✓</td></tr>
+      <tr><td>Saya dapat menemukan kesalahan variable</td>
+        <td class="c"></td><td class="c"></td><td class="c fill">✓</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ===================== S ===================== -->
+<!-- //refleksi -->
+<section class="sec flip mid" id="s">
+  <div class="side"><div class="L">S</div><div class="T">Refleksi 3-2-1</div></div>
+  <div class="content">
+    <h2>Refleksi 3-2-1</h2>
+    <div class="cols c3">
+      <div>
+        <h3>3 Hal yang Saya Pelajari</h3>
+        <div class="static-answer">1. Penggunaan let<br>2. Penggunaan const<br>3. fungsi atribut console.log</div>
+      </div>
+      <div>
+        <h3>2 Hal yang Masih Membingungkan</h3>
+        <div class="static-answer">1. - - - - -<br>2.- - - - -</div>
+      </div>
+      <div>
+        <h3>1 Hal yang Ingin Saya Coba</h3>
+        <div class="static-answer">1. Menggunakan fungsi variabel dalam aplikasi keuagan dimana ada variabel uang masuk, keluar dll</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== T ===================== -->
+<section class="sec nl" id="t">
+  <div class="side"><div class="L">T</div><div class="T">Kesimpulan</div></div>
+  <div class="content">
+    <h2>Kesimpulan</h2>
+    <p>Lengkapi kalimat berikut.</p>
+    <div class="qa">
+      <div class="qc full"><p class="q">Variable adalah</p>
+        <div class="ans">Tempat untuk menyimpan sebuah data yang diberi nama, agar data tersebut dapat digunakan kembali oleh program kedepannya</div></div>
+      <div class="qc"><p class="q"><code class="i">let</code> digunakan untuk</p>
+        <div class="ans">Menyimpan data yang sekiranya kedepannya masih bisa atau harus berubah</div></div>
+      <div class="qc"><p class="q"><code class="i">const</code> digunakan untuk</p>
+        <div class="ans">menyimpan data yang nilainya tetap dan tidak berubah</div></div>
+      <div class="qc full"><p class="q">Untuk menampilkan isi variable ke Console kita dapat menggunakan</p>
+        <div class="ans"><code class="i">console.log()</code></div>
+        <div><h3>Contoh</h3><br><br><p>let nama = "Kurt Cobain";</p><p>console.log(nama);</p></div> </div>
+    </div>
+  </div>
+</section>
+
+<div class="bab" id="bab6"><b>Bab 6</b><em>Penutup · U–Z</em><i></i></div>
+
+<!-- ===================== U ===================== -->
+<section class="sec" id="u">
+  <div class="side"><div class="L">U</div><div class="T">Tugas Individu</div></div>
+  <div class="content">
+    <h2>Tugas Individu</h2>
+    <div class="cols b">
+      <div>
+        <p>Buat sebuah program JavaScript dengan tema: <b>"Data Produk Sederhana"</b></p>
+        <p>Program harus memiliki minimal 6 variable:</p>
+        <ol class="two-col-list"><li>Nama produk</li><li>Kategori</li><li>Harga</li><li>Stok</li><li>Merek</li><li>Status produk</li></ol>
+        <h3>Ketentuan</h3>
+        <ul>
+          <li>Minimal 6 variable.</li>
+          <li>Gunakan <code class="i">let</code> dan <code class="i">const</code>.</li>
+          <li>Gunakan nama variable yang benar.</li>
+          <li>Minimal terdapat data teks dan angka.</li>
+          <li>Program harus dapat dijalankan tanpa error.</li>
+          <li>Siswa harus mampu menjelaskan fungsi setiap variable.</li>
+        </ul>
+      </div>
+      <div>
+        <p>Contoh:</p>
+<pre>const namaProduk = "Keyboard";
+const kategori = "Perangkat Komputer";
+const harga = 150000;
+let stok = 10;
+const merek = "ABC";
+const tersedia = true;
+
+console.log(namaProduk);
+console.log(kategori);
+console.log(harga);
+console.log(stok);
+console.log(merek);
+console.log(tersedia);</pre>
+      </div>
+    </div>
+    <h3>Jawaban Tugas</h3>
+    <div class="cols">
+      <div>
+
+        <img class="activity-screenshot" src="skrinsut/kodetugasindividu.png" alt="Kode Tugas Individu">
+    
+
+      </div>
+      <div style = "margin-top: 18px;", style= "margin-bottom: 90px;">
+        <table class="tw">
+          <tr><th>Variable</th><th>Fungsi</th><th>Jenis</th></tr>
+          <tr><td>namaProduk</td><td>Menyimpan nama produknya</td><td>String</td></tr>
+          <tr><td>kategori</td><td>Menyimpan kategori produknya</td><td>String</td></tr>
+          <tr><td>harga</td><td>Menyimpan harga (tetap, jadi menggunakan <code class="i">const</code>)</td><td>Number</td></tr>
+          <tr><td>stok</td><td>Menyimpan jumlah persediaan stok (bisa berubah, jadi menggunakan <code class="i">let</code>)</td><td>Number</td></tr>
+          <tr><td>merek</td><td>Menyimpan merek dari produknya</td><td>String</td></tr>
+          <tr><td>tersedia</td><td>Menyimpan status ketersediaannya produk</td><td>Boolean</td></tr>
+        </table></div>
+
+        
+    </div>
+    <img class="activity-screenshot" src="skrinsut/konsoltugasindividu.png" alt="Hasil Console Tugas Individu">
+    </div>
+
+   
+
+</section>
+
+<!-- ===================== V ===================== -->
+<section class="sec flip" id="v">
+  <div class="side"><div class="L">V</div><div class="T">Penilaian</div></div>
+  <div class="content">
+    <h2>Penilaian</h2>
+    <div class="cols">
+      <div>
+        <h3>1. Penilaian Pengetahuan</h3>
+        <div class="tw"><table>
+          <tr><th>Indikator</th><th class="c">Skor</th></tr>
+          <tr><td>Menjelaskan pengertian variable</td><td class="c"></td></tr>
+          <tr><td>Menjelaskan fungsi variable</td><td class="c"></td></tr>
+          <tr><td>Membedakan let dan const</td><td class="c"></td></tr>
+          <tr><td>Menjelaskan aturan penamaan variable</td><td class="c"></td></tr>
+          <tr><td>Menjelaskan jenis data sederhana</td><td class="c"></td></tr>
+          <tr><th>Total</th><th class="c"></th></tr>
+        </table></div>
+      </div>
+      <div>
+        <h3>2. Penilaian Keterampilan</h3>
+        <div class="tw"><table>
+          <tr><th>Aspek</th><th class="c">1</th><th class="c">2</th><th class="c">3</th><th class="c">4</th></tr>
+          <tr><td>Membuat variable</td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Penamaan variable</td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Penggunaan let / const</td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Menampilkan data</td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Ketepatan kode</td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>Debugging</td><td></td><td></td><td></td><td></td></tr>
+          <tr><th>Total</th><td></td><td></td><td></td><td></td></tr>
+        </table></div>
+      </div>
+    </div>
+    <div class="note">
+      <b>Keterangan</b><br>
+      4 – Sangat Baik: Dapat melakukan secara mandiri dan benar.<br>
+      3 – Baik: Dapat melakukan dengan sedikit bantuan.<br>
+      2 – Cukup: Dapat melakukan tetapi masih membutuhkan bimbingan.<br>
+      1 – Perlu Bimbingan: Belum mampu melakukan dengan benar.
+    </div>
+  </div>
+</section>
+
+<!-- ===================== W ===================== -->
+<section class="sec nl" id="w">
+  <div class="side"><div class="L">W</div><div class="T">Sikap</div></div>
+  <div class="content">
+    <h2>Penilaian Sikap</h2>
+    <div class="tw"><table>
+      <tr><th>Sikap</th><th class="c">1</th><th class="c">2</th><th class="c">3</th><th class="c">4</th></tr>
+      <tr><td>Kedisiplinan</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Kerja sama</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Tanggung jawab</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Keaktifan</td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Ketelitian</td><td></td><td></td><td></td><td></td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ===================== X ===================== -->
+<section class="sec flip nr" id="x">
+  <div class="side"><div class="L">X</div><div class="T">Rubrik</div></div>
+  <div class="content">
+    <h2>Rubrik Hasil Program</h2>
+    <div class="tw"><table>
+      <tr><th>Kriteria</th><th class="c">Bobot</th></tr>
+      <tr><td>Program dapat dijalankan</td><td class="c"></td></tr>
+      <tr><td>Penggunaan variable benar</td><td class="c"></td></tr>
+      <tr><td>Penamaan variable benar</td><td class="c"></td></tr>
+      <tr><td>Penggunaan let dan const tepat</td><td class="c"></td></tr>
+      <tr><td>Data yang digunakan sesuai</td><td class="c"></td></tr>
+      <tr><td>Output berhasil ditampilkan</td><td class="c"></td></tr>
+      <tr><td>Kerapian kode</td><td class="c"></td></tr>
+      <tr><th>Total</th><th class="c"></th></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ===================== Y ===================== -->
+<section class="sec mid" id="y">
+  <div class="side"><div class="L">Y</div><div class="T">Exit Ticket</div></div>
+  <div class="content">
+    <h2>Exit Ticket</h2>
+    <p>Sebelum meninggalkan kelas, jawab tiga pertanyaan berikut.</p>
+    <div class="cols c3">
+      <div class="qc">
+        <p class="q">1. Apa itu variable?</p>
+        <div class="ans">Variabel merupakan suatu wadah yang dapat digunaknan untuk menyimpan data dimana ini berfungsi aagar data didalam dapat di panggil lagi ataupuan dirubah kedepannya</div>
+      </div>
+      <div class="qc">
+        <p class="q">2. Apa perbedaan <code class="i">let</code> dan <code class="i">const</code>?</p>
+        <div class="ans"><code class="i">let</code> nilai didalanya dapat diubah, sedangkan <code class="i">const</code> nilai yang ada didalamnya tidak dapat diubah setelah dideklarasikan.</div>
+      </div>
+      <div class="qc">
+        <p class="q">3. Tuliskan satu contoh variable JavaScript.</p>
+        <div class="ans"><code class="i">let nama = "Erlangga";</code></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== Z ===================== -->
+<section class="sec flip" id="z">
+  <div class="side"><div class="L">Z</div><div class="T">Pesan</div></div>
+  <div class="content center">
+    <h2>Pesan yang saya dapat</h2>
+    <p class="big-msg">Jangan takut ketika program menghasilkan error.</p>
+    <p>Error bukan berarti kamu gagal.<br>Error adalah petunjuk bahwa programmu perlu diperbaiki.</p>
+    <div class="stamp">Error ≠ Gagal</div>
+    <p style = "margin-top: 80px;"><i>"To strive, to seek, to find, and not to yield" -— Alfred, Lord Tennyson, Ulysses (1842)</i></p>
+  </div>
+</section>
+
+</main>
+
+<footer>LKPD JavaScript - (Tugas bapak Asep Ulumudin S. Kom.) – Variable &nbsp;✦&nbsp; Erlangga &nbsp;✦&nbsp; PPLG 2</footer>
+
+</body>
+</html>
