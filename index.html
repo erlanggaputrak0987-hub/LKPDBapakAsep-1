@@ -87,7 +87,7 @@ header.hero::after{
 nav{
   position:sticky;top:0;z-index:30;
   background:var(--deep);border-bottom:3px solid var(--mustard);
-  display:flex;flex-wrap:wrap;justify-content:center;gap:4px;padding:8px 10px;
+  display:flex;flex-wrap:wrap;justify-content:flex-start;gap:4px;padding:8px 10px;
 }
 nav a{
   font-family:'Special Elite',monospace;text-decoration:none;
@@ -96,13 +96,29 @@ nav a{
 }
 nav a:hover{background:var(--mustard);color:var(--ink);border-color:var(--mustard)}
 .nav-group{
-  width:100%;display:flex;align-items:center;justify-content:center;
+  width:100%;display:flex;align-items:center;justify-content:flex-start;
   flex-wrap:wrap;gap:4px;
 }
 .nav-label{
   font-family:'Special Elite',monospace;color:var(--mustard);
   font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-right:4px;
 }
+.nav-dropdown{width:100%}
+.nav-dropdown summary{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Special Elite',monospace;color:var(--mustard);
+  font-size:11px;letter-spacing:1px;text-transform:uppercase;
+  border:1.5px solid var(--maroon2);padding:3px 8px;cursor:pointer;
+  list-style:none;
+}
+.nav-dropdown summary::-webkit-details-marker{display:none}
+.nav-dropdown summary::after{
+  content:"";width:0;height:0;
+  border-left:5px solid transparent;border-right:5px solid transparent;
+  border-top:6px solid var(--mustard);transition:transform .15s ease;
+}
+.nav-dropdown[open] summary::after{transform:rotate(180deg)}
+.nav-dropdown .nav-group{margin-top:4px}
 
 /* ================= LAYOUT ================= */
 main{max-width:1120px;margin:0 auto;padding:10px 18px 70px}
@@ -258,7 +274,8 @@ footer{
 @media (max-width:860px){
   .hero-in{grid-template-columns:1fr}
   .ticket{max-width:340px}
-  .cols,.cols.a,.cols.b,.cols.c3,.qa{grid-template-columns:1fr}
+  .cols,.cols.a,.cols.b,.cols.c3,.qa{grid-template-columns:minmax(0,1fr)}
+  .cols > *,.qa > *{min-width:0}
   .two-col-list{column-count:1}
 }
 @media (max-width:640px){
@@ -295,26 +312,32 @@ footer{
   <span>&nbsp;Variable ✦ let ✦ const ✦ console.log() ✦ String ✦ Number ✦ Boolean ✦ Variable ✦ let ✦ const ✦ console.log() ✦ String ✦ Number ✦ Boolean ✦ Error bukan gagal ✦&nbsp;</span>
 </div></div>
 
+
+<!--- ================= NAVIGASINA ================= -->
 <nav>
-  <div class="nav-group" aria-label="Navigasi A sampai Z">
-  <span class="nav-label"><h3>A–Z</h3></span>
-  <a href="#a">A</a><a href="#b">B</a><a href="#c">C</a><a href="#d">D</a><a href="#e">E</a>
-  <a href="#f">F</a><a href="#g">G</a><a href="#h">H</a><a href="#i">I</a><a href="#j">J</a>
-  <a href="#k">K</a><a href="#l">L</a><a href="#m">M</a><a href="#n">N</a><a href="#o">O</a>
-  <a href="#p">P</a><a href="#q">Q</a><a href="#r">R</a><a href="#s">S</a><a href="#t">T</a>
-  <a href="#u">U</a><a href="#v">V</a><a href="#w">W</a><a href="#x">X</a><a href="#y">Y</a><a href="#z">Z</a>
-  </div>
   <div class="nav-group" aria-label="Navigasi aktivitas">
     <span class="nav-label">Aktivitas</span>
     <a href="#e">1</a><a href="#f">2</a><a href="#g">3</a><a href="#h">4</a><a href="#i">5</a>
     <a href="#j">6</a><a href="#k">7</a><a href="#l">8</a><a href="#m">9</a><a href="#n">10</a>
     <a href="#o">11</a><a href="#p">12</a><a href="#q">13</a>
   </div>
-  <div class="nav-group" aria-label="Navigasi bab">
-    <span class="nav-label">Bab</span>
-    <a href="#bab1">1</a><a href="#bab2">2</a><a href="#bab3">3</a>
-    <a href="#bab4">4</a><a href="#bab5">5</a><a href="#bab6">6</a>
-  </div>
+  <details class="nav-dropdown">
+    <summary>A-Z</summary>
+    <div class="nav-group" aria-label="Navigasi A sampai Z">
+      <a href="#a">A</a><a href="#b">B</a><a href="#c">C</a><a href="#d">D</a><a href="#e">E</a>
+      <a href="#f">F</a><a href="#g">G</a><a href="#h">H</a><a href="#i">I</a><a href="#j">J</a>
+      <a href="#k">K</a><a href="#l">L</a><a href="#m">M</a><a href="#n">N</a><a href="#o">O</a>
+      <a href="#p">P</a><a href="#q">Q</a><a href="#r">R</a><a href="#s">S</a><a href="#t">T</a>
+      <a href="#u">U</a><a href="#v">V</a><a href="#w">W</a><a href="#x">X</a><a href="#y">Y</a><a href="#z">Z</a>
+    </div>
+  </details>
+  <details class="nav-dropdown">
+    <summary>Bab</summary>
+    <div class="nav-group" aria-label="Navigasi bab">
+      <a href="#bab1">1</a><a href="#bab2">2</a><a href="#bab3">3</a>
+      <a href="#bab4">4</a><a href="#bab5">5</a><a href="#bab6">6</a>
+    </div>
+  </details>
 </nav>
 
 <main>
@@ -1037,8 +1060,8 @@ console.log(tersedia);</pre>
     
 
       </div>
-      <div style = "margin-top: 18px;", style= "margin-bottom: 90px;">
-        <table class="tw">
+      <div class="tw" style = "margin-top: 18px;", style= "margin-bottom: 90px;">
+        <table>
           <tr><th>Variable</th><th>Fungsi</th><th>Jenis</th></tr>
           <tr><td>namaProduk</td><td>Menyimpan nama produknya</td><td>String</td></tr>
           <tr><td>kategori</td><td>Menyimpan kategori produknya</td><td>String</td></tr>
@@ -1164,7 +1187,7 @@ console.log(tersedia);</pre>
     <h2>Pesan yang saya dapat</h2>
     <p class="big-msg">Jangan takut ketika program menghasilkan error.</p>
     <p>Error bukan berarti kamu gagal.<br>Error adalah petunjuk bahwa programmu perlu diperbaiki.</p>
-    <div class="stamp">Error ≠ Gagal</div>
+    <div style="margin-top: 40px;" class="stamp">Error ≠ Gagal</div>
     <p style = "margin-top: 80px;"><i>"To strive, to seek, to find, and not to yield" -— Alfred, Lord Tennyson, Ulysses (1842)</i></p>
   </div>
 </section>
