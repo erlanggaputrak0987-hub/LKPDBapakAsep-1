@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LKPD 2 JavaScript – Input, Output &amp; Operator | Erlangga</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Special+Elite&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --maroon:#6d2830;
+  --maroon2:#8a3a42;
+  --deep:#451920;
+  --cream:#efe2c8;
+  --paper:#f6ecd8;
+  --rose:#d8a597;
+  --rose2:#ecc9bb;
+  --mustard:#d6a94f;
+  --ink:#2a1618;
+  --code-bg:#2a1517;
+  --code-fg:#f3e3c3;
+  --ora:#c8602e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:50px}
+body{
+  font-family:'Space Mono',monospace;
+  font-size:14.5px;line-height:1.65;
+  color:var(--ink);
+  background-color:var(--maroon);
+  background-image:
+    repeating-linear-gradient(135deg,rgba(0,0,0,.07) 0 2px,transparent 2px 9px),
+    radial-gradient(rgba(255,255,255,.035) 1px,transparent 1.5px);
+  background-size:auto,6px 6px;
+}
+
+/* ================= HERO ================= */
+header.hero{
+  position:relative;background:var(--deep);color:var(--cream);
+  background-image:radial-gradient(rgba(239,226,200,.09) 2px,transparent 2.6px);
+  background-size:14px 14px;
+  border-bottom:4px solid var(--ink);
+  margin-bottom:22px;
+}
+header.hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:-26px;height:22px;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='14'><polygon points='0,0 28,0 14,14' fill='%23451920'/></svg>") repeat-x;
+  background-size:28px 14px;
+}
+.hero-in{
+  max-width:1120px;margin:0 auto;padding:54px 22px 64px;
+  text-align:center;
+}
+.hero .kicker{
+  display:inline-block;font-family:'Special Elite',monospace;
+  background:var(--mustard);color:var(--ink);
+  padding:3px 12px;transform:rotate(-2deg);
+  letter-spacing:2px;text-transform:uppercase;font-size:13px;margin-bottom:16px;
+}
+.hero h1{
+  font-family:'Anton',sans-serif;font-weight:400;
+  width:100%;font-size:clamp(28px,10vw,120px);line-height:.9;
+  text-transform:uppercase;letter-spacing:1px;
+  color:var(--cream);text-shadow:6px 6px 0 var(--maroon2);
+}
+.hero h1 .title-main,.hero h1 .title-operator{display:inline-block;white-space:nowrap}
+.hero h1 .title-operator{color:transparent;-webkit-text-stroke:2px var(--cream);text-shadow:none}
+.hero .sub{margin:18px auto 0;max-width:760px;border-top:5px solid var(--mustard);padding-top:10px}
+.ticket{
+  max-width:760px;margin:34px auto 0;
+  background:var(--paper);color:var(--ink);
+  border:3px solid var(--ink);box-shadow:9px 9px 0 rgba(0,0,0,.55);
+  position:relative;
+}
+.ticket::before{
+  content:"";position:absolute;left:-3px;top:50%;width:14px;height:26px;margin-top:-13px;
+  background:var(--deep);border:3px solid var(--ink);border-left:none;
+}
+.ticket .row{padding:12px 20px 12px 26px}
+.ticket .row+.row{border-top:3px dashed var(--ink)}
+.ticket small{display:block;font-family:'Special Elite',monospace;letter-spacing:3px;text-transform:uppercase;font-size:11px;color:var(--maroon2)}
+.ticket b{font-family:'Anton',sans-serif;font-weight:400;font-size:26px;letter-spacing:1px;text-transform:uppercase;line-height:1.1}
+
+/* ================= NAV ================= */
+nav{
+  position:sticky;top:0;z-index:30;
+  background:var(--deep);border-bottom:3px solid var(--mustard);
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px;padding:8px 14px;
+}
+.nav-links{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+nav a{
+  font-family:'Special Elite',monospace;text-decoration:none;
+  color:var(--cream);border:1.5px solid var(--maroon2);
+  padding:2px 8px;font-size:12px;
+}
+nav a:hover{background:var(--mustard);color:var(--ink);border-color:var(--mustard)}
+/* ================= LAYOUT ================= */
+main{max-width:1120px;margin:0 auto;padding:10px 18px 70px}
+
+.bab{
+  margin:56px 0 26px;display:flex;align-items:center;gap:16px;
+}
+.bab b{
+  font-family:'Anton',sans-serif;font-weight:400;font-size:clamp(24px,4.5vw,40px);
+  background:var(--rose);color:var(--deep);padding:2px 22px 2px 16px;letter-spacing:2px;
+  text-transform:uppercase;transform:skew(-8deg);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--deep);
+}
+.bab i{flex:1;height:8px;background:repeating-linear-gradient(135deg,var(--cream) 0 6px,transparent 6px 12px);opacity:.55}
+.bab em{font-family:'Special Elite',monospace;font-style:normal;color:var(--cream);letter-spacing:2px;font-size:13px;text-transform:uppercase}
+
+.sec{
+  position:relative;
+  display:grid;grid-template-columns:150px 1fr;
+  background:var(--paper);border:3px solid var(--ink);
+  box-shadow:10px 10px 0 var(--deep);
+  margin:40px 0;
+}
+.sec.flip{grid-template-columns:1fr 150px}
+.sec.flip .side{order:2;border-right:none;border-left:3px solid var(--ink)}
+.sec.nl{max-width:850px}
+.sec.nr{max-width:850px;margin-left:auto}
+.sec.mid{max-width:980px;margin-left:auto;margin-right:auto}
+.sec::before{
+  content:"";position:absolute;top:-15px;left:176px;width:96px;height:26px;
+  background:rgba(214,169,79,.82);transform:rotate(-4deg);
+  border-left:2px dotted rgba(42,22,24,.35);border-right:2px dotted rgba(42,22,24,.35);z-index:2;
+}
+.sec.flip::before{left:auto;right:176px;transform:rotate(3deg)}
+.side{
+  background:var(--maroon);color:var(--cream);
+  border-right:3px solid var(--ink);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  padding:16px 8px;gap:6px;
+  background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.14) 0 3px,transparent 3px 10px);
+}
+.side .L{
+  font-family:'Anton',sans-serif;font-size:100px;line-height:.95;
+  color:transparent;-webkit-text-stroke:2.5px var(--cream);
+}
+.side .T{
+  font-family:'Special Elite',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  writing-mode:vertical-rl;transform:rotate(180deg);color:var(--mustard);margin-top:6px;text-align:center;
+}
+.content{padding:22px 26px 26px;min-width:0}
+.content > * + *{margin-top:14px}
+.content h2{
+  font-family:'Anton',sans-serif;font-weight:400;font-size:clamp(24px,3.4vw,34px);
+  text-transform:uppercase;letter-spacing:1.5px;line-height:1.05;color:var(--maroon);
+  padding-bottom:8px;border-bottom:4px double var(--ink);
+}
+h3{
+  display:inline-block;font-family:'Special Elite',monospace;font-weight:400;
+  font-size:13px;letter-spacing:1.5px;text-transform:uppercase;
+  background:var(--maroon);color:var(--paper);padding:2px 10px;transform:rotate(-1.5deg);
+  margin-top:6px;
+}
+ul,ol{padding-left:22px}
+li+li{margin-top:4px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.cols.a{grid-template-columns:1.25fr .75fr}
+.cols.b{grid-template-columns:.8fr 1.2fr}
+.cols.c3{grid-template-columns:repeat(3,1fr)}
+.cols > div > * + *{margin-top:12px}
+.two-col-list{column-count:2;column-gap:30px}
+.two-col-list li{break-inside:avoid}
+
+/* ---------- ANSWERS ---------- */
+.ans{
+  background:var(--maroon);color:var(--cream);
+  border-left:7px solid var(--mustard);padding:9px 14px;
+  position:relative;
+}
+.ans::before{
+  content:"JAWABAN / HASIL";display:block;font-family:'Special Elite',monospace;
+  color:var(--mustard);font-size:11px;letter-spacing:3px;margin-bottom:2px;
+}
+.a-inline{
+  background:var(--mustard);color:var(--ink);font-weight:700;
+  padding:0 6px;border:1.5px solid var(--ink);display:inline-block;
+}
+
+/* ---------- CODE & TABLES ---------- */
+pre{
+  background:var(--code-bg);color:var(--code-fg);
+  padding:24px 16px 14px;overflow-x:auto;position:relative;
+  border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);
+  font-size:13px;line-height:1.55;
+}
+pre::before{
+  content:"JS";position:absolute;top:0;left:0;
+  font-family:'Special Elite',monospace;font-size:11px;letter-spacing:2px;
+  background:var(--mustard);color:var(--ink);padding:0 10px;
+}
+code.i{background:#e5d1ab;padding:1px 6px;border:1px solid #c9ad78;color:var(--ink)}
+.k{color:#e3b75f}.s{color:#c4d49a}.n{color:#f2a38c}.c{color:#a38a82;font-style:italic}
+
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:var(--paper)}
+th,td{border:2px solid var(--ink);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:var(--maroon);color:var(--paper);font-family:'Special Elite',monospace;font-weight:400;letter-spacing:1px;text-transform:uppercase;font-size:12.5px}
+td.c,th.c{text-align:center}
+td.fill{background:var(--rose2);font-weight:700;color:var(--deep)}
+
+/* ---------- CARDS / BOXES ---------- */
+.box{border:2px solid var(--ink);padding:12px 14px;background:var(--cream)}
+.box.r{background:var(--rose2)}
+.box > * + *{margin-top:10px}
+.flow-diagram{display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Anton',sans-serif;margin:10px 0}
+.flow-diagram span{background:var(--mustard);color:var(--ink);border:2px solid var(--ink);padding:4px 16px;letter-spacing:1px}
+
+/* ---------- PATH LIST ---------- */
+.path-list{list-style:none;padding:0}
+.path-list li{
+  border:2px solid var(--ink);background:var(--cream);padding:8px 14px;
+  display:flex;align-items:center;gap:12px;margin-bottom:-2px;
+}
+.path-list li.now{background:var(--maroon);color:var(--cream);font-weight:700}
+.path-list li.now b{color:var(--mustard)}
+.path-list li b{font-family:'Anton',sans-serif;font-size:18px;color:var(--maroon);width:26px}
+.path-list .tag{margin-left:auto;background:var(--mustard);color:var(--ink);font-size:11px;font-family:'Special Elite',monospace;padding:1px 8px;border:1px solid var(--ink)}
+
+footer{
+  background:var(--deep);color:var(--cream);text-align:center;
+  padding:26px 16px;border-top:4px solid var(--mustard);
+  font-family:'Special Elite',monospace;letter-spacing:2px;text-transform:uppercase;font-size:13px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width:860px){
+  .cols,.cols.a,.cols.b,.cols.c3{grid-template-columns:minmax(0,1fr)}
+  .two-col-list{column-count:1}
+}
+@media (max-width:640px){
+  .sec,.sec.flip{grid-template-columns:1fr}
+  .sec.flip .side{order:0;border-left:none}
+  .side{flex-direction:row;border-right:none;border-bottom:3px solid var(--ink);padding:6px 14px;align-items:center;gap:14px}
+  .side .L{font-size:56px}
+  .side .T{writing-mode:horizontal-tb;transform:none}
+  .sec::before,.sec.flip::before{left:20px;right:auto}
+  .content{padding:18px 16px 22px}
+  .sec.nl,.sec.nr,.sec.mid{max-width:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <div>
+      <span class="kicker">SMKN 1 GARUT · Dasar-Dasar PPLG</span>
+      <h1><span class="title-main">Input Output</span> <span class="title-operator">&amp; Operator</span></h1>
+      <p class="sub">Lembar Kerja Peserta Didik (LKPD 2) &mdash; Materi: <b>JavaScript – Input, Output dan Operator</b></p>
+    </div>
+    <div class="ticket">
+      <div class="row"><small>Nama Siswa</small><b>Erlangga Putra K.</b></div>
+      <div class="row"><small>Kelas &amp; Tanggal</small><b>X PPLG 2 · 28 OKT 2026</b></div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-links">
+    <a href="#a">A. Petunjuk</a>
+    <a href="#b">B. Prediksi</a>
+    <a href="#c">C. Modulo</a>
+    <a href="#d">D. Prompt</a>
+    <a href="#e">E. Umur</a>
+    <a href="#f">F. Kasir</a>
+    <a href="#g">G. TPS</a>
+    <a href="#h">H. Warung</a>
+    <a href="#i">I. Debug</a>
+    <a href="#j">J. Tabungan</a>
+    <a href="#k">K. Bahan Ajar</a>
+    <a href="#l">L. Asesmen</a>
+    <a href="#m">M. Rubrik</a>
+    <a href="#n">N. Refleksi</a>
+    <a href="#o">O. Exit</a>
+    <a href="#p">P. Lanjut</a>
+  </div>
+</nav>
+
+<main>
+
+<div class="bab" id="bab1"><b>Bab 1</b><em>Petunjuk &amp; Observasi · A–C</em><i></i></div>
+
+<!-- ===================== A ===================== -->
+<section class="sec nl" id="a">
+  <div class="side"><div class="L">A</div><div class="T">Petunjuk</div></div>
+  <div class="content">
+    <h2>Petunjuk Pembelajaran</h2>
+    <div class="box">
+      <ul>
+        <li>Kerjakan seluruh aktivitas secara berurutan.</li>
+        <li>Jalankan setiap blok kode pada browser (Console / Script) dan amati hasilnya.</li>
+        <li>Pahami fungsi setiap baris kode, jangan sekadar menyalin tanpa mengerti alurnya.</li>
+        <li>Jika menemukan error, baca pesan error dengan teliti dan perbaiki kodenya.</li>
+        <li>Diskusikan bagian yang sulit bersama teman kelompok atau pasanganmu.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== B ===================== -->
+<section class="sec flip" id="b">
+  <div class="side"><div class="L">B</div><div class="T">Aktivitas 1</div></div>
+  <div class="content">
+    <h2>Aktivitas 1 – Prediksi Aritmatika</h2>
+    <p>Perhatikan kode JavaScript berikut:</p>
+<pre><span class="k">let</span> a = <span class="n">10</span>;
+<span class="k">let</span> b = <span class="n">5</span>;
+console.log(a + b);
+console.log(a - b);
+console.log(a * b);
+console.log(a / b);</pre>
+
+  <img src="skrinsut/kode1.png" alt="Kode Aktivias 1" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <p>Isilah tabel prediksi berikut sebelum menjalankan kode:</p>
+    <div class="tw"><table>
+      <tr><th>Operasi</th><th>Prediksi</th><th>Hasil Sebenarnya</th></tr>
+      <tr><td>a + b</td><td><span class="a-inline">15</span></td><td><span class="a-inline">15</span></td></tr>
+      <tr><td>a - b</td><td><span class="a-inline">5</span></td><td><span class="a-inline">5</span></td></tr>
+      <tr><td>a * b</td><td><span class="a-inline">50</span></td><td><span class="a-inline">50</span></td></tr>
+      <tr><td>a / b</td><td><span class="a-inline">2</span></td><td><span class="a-inline">2</span></td></tr>
+    </table></div>
+    <img src="skrinsut/konsol1.png" alt="Hasil Aktivitas 1" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <p>Apakah prediksi kamu benar? <span class="a-inline">☑ Ya</span> ☐ Sebagian ☐ Tidak</p>
+    <div class="ans">Karena operator aritmatika pada JavaScript bekerja sama seperti perhitungan matematika biasa, serta variabel a dan b masing-masing menyimpan nilai 10 dan 5.</div>
+  </div>
+</section>
+
+<!-- ===================== C ===================== -->
+<section class="sec nr" id="c">
+  <div class="side"><div class="L">C</div><div class="T">Aktivitas 2</div></div>
+  <div class="content">
+    <h2>Aktivitas 2 – Eksperimen Modulo (%)</h2>
+    <p>Perhatikan dan jalankan kode berikut:</p>
+
+    <img src="skrinsut/kode2.png" alt="Kode Aktivitas 2" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+
+    <p style="margin-top:30px;">Hasil Output:</p>
+
+    <img src="skrinsut/konsol2.png" alt="Hasil Aktivitas 2" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+
+    <h3 style="margin-top: 30px;">Apa yang kamu temukan tentang operator %?</h3>
+    <div class="ans">Yang saya dapat dari operator % adalah operator untuk melihat sisa bagi. Dimana, akan menghasilkan sisa bagi dari suatu bilangan dibagi bilangan lainnya. Contoh, 20 : 4 = 5, hasilnya bulat sudah tidak ada sisa lagi maka 20 % 4 = 0</div>
+  </div>
+</section>
+
+<div class="bab" id="bab2"><b>Bab 2</b><em>Input &amp; Interaksi · D–F</em><i></i></div>
+
+<!-- ===================== D ===================== -->
+<section class="sec flip" id="d">
+  <div class="side"><div class="L">D</div><div class="T">Aktivitas 3</div></div>
+  <div class="content">
+    <h2>Aktivitas 3 – Input dengan prompt()</h2>
+    <p>Coba buat dan jalankan perintah JavaScript berikut:</p>
+      <img src="skrinsut/kode3.png" alt="Kode Aktivitas 3" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <p style ="margin-top: 30px;">Hasil Output:</p>
+      <img src="skrinsut/3.png" alt="Popup Aktivitas 3" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+      <img src="skrinsut/33.png" alt="Popup Aktivitas 3" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+      <img src="skrinsut/333.png" alt="Popup Aktivitas 3" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+      <img src="skrinsut/3333.png" alt="Popup Aktivitas 3" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <h3 style="margin-top: 30px;">Pertanyaan: Apa fungsi dari prompt()?</h3>
+    <div class="ans">Fungsi prompt() adalah untuk menampilkan popup dialog input di browser sehingga pengguna dapat mengetikkan teks atau data. Data input tersebut lalu disimpan ke dalam variabel untuk diproses.</div>
+  </div>
+</section>
+
+<!-- ===================== E ===================== -->
+<section class="sec mid" id="e">
+  <div class="side"><div class="L">E</div><div class="T">Aktivitas 4</div></div>
+  <div class="content">
+    <h2>Aktivitas 4 – Menghitung Umur</h2>
+    <p>Gunakan variabel dan perhitungan tahun lahir:</p>
+<pre><span class="k">let</span> tahunLahir = prompt(<span class="s">"Masukkan tahun lahir:"</span>);
+<span class="k">let</span> tahunSekarang = <span class="n">2026</span>;
+<span class="k">let</span> umur = tahunSekarang - tahunLahir;
+console.log(umur);</pre>
+
+<img src="skrinsut/kode4.png" alt="Kode Aktivitas 4" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <h3 style="margin-top: 30px;">Uji coba dengan Tahun Lahir kamu:</h3>
+    <img src="skrinsut/4.png" alt="Popup Aktivitas 4" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <img src="skrinsut/44.png" alt="Popup Aktivitas 4" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+  </div>
+</section>
+
+<!-- ===================== F ===================== -->
+<section class="sec flip" id="f">
+  <div class="side"><div class="L">F</div><div class="T">Aktivitas 5</div></div>
+  <div class="content">
+    <h2>Aktivitas 5 – Mesin Kasir Mini</h2>
+    <p>Simulasi kalkulasi transaksi sederhana:</p>
+      <img src="skrinsut/kode5.png" alt="Kode Aktivitas 5" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <p><strong>Skenario Uji Coba:</strong></p>
+    <img src="skrinsut/harga5.png" alt="Popup Aktivitas 5" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <img src="skrinsut/jumlah5.png" alt="Popup Aktivitas 5" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <p>Hasil Output :</p>
+    <img src="skrinsut/konsol5.png" alt="Hasil Aktivitas 5" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+  </div>
+</section>
+
+<div class="bab" id="bab3"><b>Bab 3</b><em>Studi Kasus &amp; Tantangan · G–J</em><i></i></div>
+
+<!-- ===================== G ===================== -->
+<section class="sec" id="g">
+  <div class="side"><div class="L">G</div><div class="T">Aktivitas 6</div></div>
+  <div class="content">
+    <h2>Aktivitas 6 – Think Pair Share</h2>
+    <div class="cols c3">
+      <div class="box">
+        <h3>THINK</h3>
+        <p>Mengapa kita membutuhkan variabel <code>total</code>?</p>
+        <div class="ans">Agar hasil perhitungan harga * jumlah tersimpan di memori sehingga dapat digunakan kembali (misalnya untuk menghitung diskon atau dicetak) tanpa harus menghitung ulang.</div>
+      </div>
+      <div class="box r">
+        <h3>PAIR</h3>
+        <p>Apakah jawabanmu dan pasanganmu sama?</p>
+        <div class="ans">☑ Ya, memiliki ide dasar yang sama.</div>
+      </div>
+      <div class="box">
+        <h3>SHARE</h3>
+        <p>Kesimpulan Diskusi Kelompok:</p>
+        <div class="ans">Variabel sangat penting sebagai penampung data sementara dalam alur Input - Proses - Output agar kode program tersusun rapi dan efisien.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== H ===================== -->
+<section class="sec flip mid" id="h">
+  <div class="side"><div class="L">H</div><div class="T">Aktivitas 7</div></div>
+  <div class="content">
+    <h2>Aktivitas 7 – Challenge: Warung Digital</h2>
+    <p>Buatlah program yang meminta input Nama Makanan, Harga, dan Jumlah. Lalu hitung totalnya dan diskon 10%!</p>
+    <div class="ans">
+
+    <img src="skrinsut/kode7.png" alt="Kode Aktivitas 7" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+
+      <p>Contoh Uji:</p>
+
+    <img src="skrinsut/nama7.png" alt="Popup Aktivitas 7" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <img src="skrinsut/harga7.png" alt="Popup Aktivitas 7" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <img src="skrinsut/jumlah7.png" alt="Popup Aktivitas 7" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    
+    </div>
+
+    <p style="margin-top: 30px;">Hasil Output:</p> 
+    <img src="skrinsut/konsol7.png" alt="Hasil Aktivitas 7" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+     
+  </div>
+</section>
+
+<!-- ===================== I ===================== -->
+<section class="sec" id="i">
+  <div class="side"><div class="L">I</div><div class="T">Aktivitas 8</div></div>
+  <div class="content">
+    <h2>Aktivitas 8 – Debugging Kode Error</h2>
+    <p>Temukan kesalahan pada sintaks berikut:</p>
+    <img src="skrinsut/kode8gagal.png" alt="Kode Aktivitas 8" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <img src="skrinsut/konsol8gagal.png" alt="Hasil Aktivitas 8" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px"> 
+    <h3>Analisis Kesalahan &amp; Perbaikan:</h3>
+    <div class="ans">
+      <p><b>Penyebab Error:</b> Variabel <code>total harga</code> menggunakan spasi. Aturan penamaan variabel JavaScript tidak membolehkan adanya spasi.</p>
+      <p><b>Perbaikan Kode:</b></p>
+      <img src="skrinsut/kode8berhasil.png" alt="Kode Aktivitas 8" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+      <img src="skrinsut/konsol8berhasil.png" alt="Hasil Aktivitas 8" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    </div>
+  </div>
+</section>
+
+<!-- ===================== J ===================== -->
+<section class="sec flip nl" id="j">
+  <div class="side"><div class="L">J</div><div class="T">Aktivitas 9</div></div>
+  <div class="content">
+    <h2>Aktivitas 9 – Challenge Mandiri: Kalkulator Tabungan</h2>
+    <p>Program menghitung total tabungan dari uang awal + tabungan 3 hari:</p>
+    <div class="ans">
+
+    <img src="skrinsut/kode9.png" alt="Kode Aktivitas 9" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+
+    <p>Proses PopUp</p>
+    <img src="skrinsut/uangawal9.png" alt="Hasil Aktivitas 9" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+     <img src="skrinsut/h19.png" alt="Hasil Aktivitas 9" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+     <img src="skrinsut/h29.png" alt="Hasil Aktivitas 9" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+     <img src="skrinsut/h39.png" alt="Hasil Aktivitas 9" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+
+     
+    </div>
+    <p>Hasil Output</p>
+     <img src="skrinsut/konsol9.png" alt="Hasil Aktivitas 9" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+  </div>
+</section>
+
+<div class="bab" id="bab4"><b>Bab 4</b><em>Pendalaman &amp; Evaluasi · K–P</em><i></i></div>
+
+<!-- ===================== K ===================== -->
+<section class="sec mid" id="k">
+  <div class="side"><div class="L">K</div><div class="T">Bahan Ajar</div></div>
+  <div class="content">
+    <h2>Bahan Ajar – Input, Output &amp; Operator</h2>
+    
+    <h3 style="margin-top: 30px;">1. Konsep Dasar IPO</h3>
+    <div class="flow-diagram">
+      <span>INPUT</span> &rarr; <span>PROCESS</span> &rarr; <span>OUTPUT</span>
+    </div>
+
+    <div class="cols">
+      <div>
+         <h3 style="margin-top: 30px;">12. Variabel &amp; Output</h3>
+<pre><span class="k">let</span> nama = <span class="s">"Budi"</span>;
+console.log(<span class="s">"Nama:"</span>, nama);</pre>
+
+        <h3 style="margin-top: 30px;">3. Perintah Input prompt()</h3>
+<pre><span class="k">let</span> nama = prompt(<span class="s">"Masukkan Nama:"</span>);</pre>
+
+        <h3 style="margin-top: 30px;">4. Konversi Data Number()</h3>
+        <p>Secara bawaan <code>prompt()</code> mengembalikan data berjenis Teks (String). Gunakan <code>Number()</code> agar bisa dihitung secara aritmatika.</p>
+<pre><span class="k">let</span> angka = Number(prompt(<span class="s">"Isi Angka:"</span>));</pre>
+      </div>
+
+      <div>
+        <h3 style="margin-top: 30px;">5. Operator Aritmatika Table</h3>
+        <div class="tw"><table>
+          <tr><th>Op</th><th>Fungsi</th><th>Contoh</th><th>Hasil</th></tr>
+          <tr><td class="c">+</td><td>Tambah</td><td>10 + 5</td><td>15</td></tr>
+          <tr><td class="c">-</td><td>Kurang</td><td>10 - 5</td><td>5</td></tr>
+          <tr><td class="c">*</td><td>Kali</td><td>10 * 5</td><td>50</td></tr>
+          <tr><td class="c">/</td><td>Bagi</td><td>10 / 5</td><td>2</td></tr>
+          <tr><td class="c">%</td><td>Sisa Bagi</td><td>10 % 3</td><td>1</td></tr>
+        </table></div>
+
+        <h3 style="margin-top: 30px;">6. Pola Formulasi Program</h3>
+<pre><span class="k">let</span> panjang = <span class="n">10</span>;
+<span class="k">let</span> lebar = <span class="n">5</span>;
+<span class="k">let</span> luas = panjang * lebar;
+console.log(luas);</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== L ===================== -->
+<section class="sec" id="l">
+  <div class="side"><div class="L">L</div><div class="T">Asesmen</div></div>
+  <div class="content">
+    <h2>Asesmen Formatif</h2>
+    <div class="cols">
+      <div class="box">
+        <p><b>1. Output dari:</b> <code>let a = 8; let b = 2; console.log(a + b);</code></p>
+        <div class="ans">Output: <span class="a-inline">10</span></div>
+      </div>
+      <div class="box">
+        <p><b>2. Output dari:</b> <code>let a = 10; let b = 3; console.log(a % b);</code></p>
+        <div class="ans">Output: <span class="a-inline">1</span> (Sisa pembagian 10 : 3)</div>
+      </div>
+    </div>
+    <div class="box r">
+      <p><b>3. Apa fungsi utama dari fungsi prompt()?</b></p>
+      <div class="ans">Menerima masukan/input data berbentuk teks dari pengguna dari popup box dialog pada browser.</div>
+    </div>
+    <div class="box">
+      <p><b>4. Kode menghitung Luas Persegi Panjang (panjang 10, lebar 5):</b></p>
+      <div class="ans">
+    <img src="skrinsut/kodepanjang.png" alt="Kode Luas Persegi Panjang" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+    <img src="skrinsut/konsollebar.png" alt="Hasil Luas Persegi Panjang" border="0" style="max-width:100%;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--maroon2);margin-top:12px">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== M ===================== -->
+<section class="sec flip mid" id="m">
+  <div class="side"><div class="L">M</div><div class="T">Rubrik</div></div>
+  <div class="content">
+    <h2>Rubrik Penilaian</h2>
+    <p>Isi skor pencapaian peserta didik pada kolom yang sesuai:</p>
+    <div class="tw"><table>
+      <thead>
+        <tr><th>Aspek Penilaian</th><th class="c">1</th><th class="c">2</th><th class="c">3</th><th class="c">4</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Memahami Input-Output</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+        <tr><td>Penggunaan Variabel</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+        <tr><td>Penggunaan Operator Aritmatika</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+        <tr><td>Penggunaan prompt() &amp; Konversi</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+        <tr><td>Ketepatan Sintaks Program</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+        <tr><td>Kemampuan Debugging Error</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+        <tr><td>Kemandirian Kerja</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+        <tr><td>Kreativitas Solusi</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td></tr>
+      </tbody>
+    </table></div>
+    <div class="box r">
+      <b>Keterangan Skor:</b><br>
+      <b>4</b> = Mandiri &amp; Sangat Tepat | <b>3</b> = Tepat dengan sedikit petunjuk | <b>2</b> = Membutuhkan Bimbingan | <b>1</b> = Belum Mampu
+    </div>
+  </div>
+</section>
+
+<!-- ===================== N ===================== -->
+<section class="sec" id="n">
+  <div class="side"><div class="L">N</div><div class="T">Refleksi</div></div>
+  <div class="content">
+    <h2>Refleksi Pembelajaran Mendalam</h2>
+    <div class="cols c3">
+      <div class="box">
+        <h3>Berkesadaran</h3>
+        <p>Hari ini saya menyadari bahwa...</p>
+        <div class="ans">prompt() memunculkan popup box yang akan menerima inputan dari pengguna untuk diproses didalam suatu variabel</div>
+      </div>
+      <div class="box r">
+        <h3>Bermakna</h3>
+        <p>Materi ini dapat diterapkan untuk...</p>
+        <div class="ans">Membuat aplikasi kasir minimarket, penghitung diskon, kalkulator tabungan, dan formulir interaktif web.</div>
+      </div>
+      <div class="box">
+        <h3>Menggembirakan</h3>
+        <p>Bagian favorit saya hari ini...</p>
+        <div class="ans">Ketika saya mencoba praktek dari setiap aktivitasnya</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== O ===================== -->
+<section class="sec flip nl" id="o">
+  <div class="side"><div class="L">O</div><div class="T">Exit Ticket</div></div>
+  <div class="content">
+    <h2>Exit Ticket</h2>
+    <div class="box">
+      <p><b>1. Satu hal yang sudah saya kuasai:</b></p>
+      <div class="ans">Menggunakan operator aritmatika dan menampilkan hasil kalkulasi menggunakan console.log().</div>
+    </div>
+    <div class="box r">
+      <p><b>2. Satu hal yang masih membingungkan:</b></p>
+      <div class="ans">1 dan 2</div>
+    </div>
+    <div class="box">
+      <p><b>3. Satu hal yang ingin saya coba:</b></p>
+      <div class="ans">Tidak know, mungkin membuat kalkolator dan terus belajar</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== P ===================== -->
+<section class="sec mid" id="p">
+  <div class="side"><div class="L">P</div><div class="T">Lanjutan</div></div>
+  <div class="content">
+    <h2>Urutan Materi Selanjutnya</h2>
+    <ul class="path-list" id="materiPath"></ul>
+  </div>
+</section>
+
+</main>
+
+<footer>SMKN 1 GARUT &bull; Dasar-Dasar PPLG &bull; LKPD JavaScript 2<br>Erlangga Putra Kaumbur &bull; X PPLG 2 &bull; 28 Oktober 2026</footer>
+
+<script>
+// Roadmap Materilist Rendering
+const daftarMateri = [
+  "Pengenalan JavaScript",
+  "Variable (let & const)",
+  "Input – Output – Aritmatika",
+  "Number & String + Konversi Data",
+  "Operator Perbandingan",
+  "Boolean & Logika",
+  "Percabangan if",
+  "if – else & else if",
+  "Nested if",
+  "Perulangan (Loops)",
+  "Array Dasar",
+  "Function Dasar",
+  "Object JavaScript",
+  "DOM Manipulation",
+  "Event Handling",
+  "Mini Project Web Application"
+];
+
+const pathContainer = document.getElementById('materiPath');
+pathContainer.innerHTML = daftarMateri.map((materi, i) => {
+  const isCurrent = (i === 2);
+  return `<li class="${isCurrent ? 'now' : ''}">
+    <b>${i + 1}</b>
+    <span>${materi}</span>
+    ${isCurrent ? '<span class="tag">SEKARANG</span>' : ''}
+  </li>`;
+}).join('');
+</script>
+
+</body>
+</html>
